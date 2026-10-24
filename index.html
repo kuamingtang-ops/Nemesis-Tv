@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nemesis TV</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#0b0d12;
+  color:#f4f4f5;
+  font-family:Arial,sans-serif;
+}
+header{
+  background:#151923;
+  padding:24px 18px;
+  border-bottom:1px solid #303746;
+}
+.logo{font-size:27px;font-weight:bold;letter-spacing:2px}
+.logo span{color:#e63946}
+header p{color:#aab0bd;margin-bottom:0}
+main{max-width:700px;margin:35px auto;padding:18px}
+.panel{
+  background:#151923;
+  border:1px solid #303746;
+  border-radius:16px;
+  padding:24px;
+}
+.tag{color:#e63946;font-size:12px;letter-spacing:2px}
+h1{font-size:25px}
+.desc{color:#b4bac7;line-height:1.6}
+audio{width:100%;margin:22px 0}
+button{
+  background:#e63946;color:white;border:0;
+  border-radius:9px;padding:12px 17px;
+  font-size:15px;font-weight:bold;cursor:pointer;
+}
+button:active{opacity:.7}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+input[type=range]{width:100%;accent-color:#e63946}
+label{display:block;margin:18px 0 8px;color:#b4bac7}
+footer{text-align:center;color:#747c8c;padding:25px;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">NEMESIS <span>TV</span></div>
+  <p>Haberin sesi. Gerçeğin yankısı.</p>
+</header>
+
+<main>
+  <div class="panel">
+    <div class="tag">● NEMESIS HABER MERKEZİ</div>
+    <h1 id="title">Özel Haber Bülteni</h1>
+    <p class="desc" id="desc">
+      Nemesis TV sesli haber yayınına hoş geldiniz.
+      Haberi dinlemek için oynat tuşuna basın.
+    </p>
+
+    <audio id="audio" controls preload="metadata">
+      <source src="ses.mp3" type="audio/mpeg">
+      Tarayıcınız ses oynatmayı desteklemiyor.
+    </audio>
+
+    <div class="row">
+      <button onclick="skip(-10)">⏪ 10 sn</button>
+      <button onclick="togglePlay()" id="play">▶ Oynat</button>
+      <button onclick="skip(10)">10 sn ⏩</button>
+    </div>
+
+    <label for="volume">Ses seviyesi</label>
+    <input id="volume" type="range" min="0" max="1"
+      step="0.05" value="1">
+
+    <label for="speed">Oynatma hızı</label>
+    <select id="speed" style="padding:10px;border-radius:8px">
+      <option value="0.75">0.75x</option>
+      <option value="1" selected>1x Normal</option>
+      <option value="1.25">1.25x</option>
+      <option value="1.5">1.5x</option>
+      <option value="2">2x</option>
+    </select>
+  </div>
+</main>
+
+<footer>© Nemesis TV · Bağımsız Sesli Haber Yayını</footer>
+
+<script>
+const audio = document.getElementById('audio');
+const play = document.getElementById('play');
+
+function togglePlay(){
+  if(audio.paused){
+    audio.play().catch(()=>alert(
+      'Ses dosyası henüz eklenmemiş olabilir.'
+    ));
+  }else{
+    audio.pause();
+  }
+}
+function skip(seconds){
+  audio.currentTime = Math.max(
+    0, Math.min(audio.duration || 0,
+    audio.currentTime + seconds)
+  );
+}
+audio.addEventListener('play',()=>{
+  play.textContent='⏸ Duraklat';
+});
+audio.addEventListener('pause',()=>{
+  play.textContent='▶ Oynat';
+});
+document.getElementById('volume').addEventListener('input',e=>{
+  audio.volume=Number(e.target.value);
+});
+document.getElementById('speed').addEventListener('change',e=>{
+  audio.playbackRate=Number(e.target.value);
+});
+</script>
+</body>
+</html>
